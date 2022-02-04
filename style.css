@@ -1,0 +1,151 @@
+* {
+    margin: 0; 
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    height: 100vh; 
+    width: 100vw; 
+    background-color: rgb(206, 206, 206); 
+}
+
+.calculator {
+    padding: 20px; 
+    background-color: rgba(100,100,100); 
+    box-shadow: 0 0 15px 0 rgba(0,0,0,0.25); 
+    border-radius: 5px; 
+
+    display: grid; 
+    grid-template-rows: 1fr 4fr; 
+    width: 80%; 
+    height: 80%; 
+}
+
+.screen {
+    border-radius: 5px; 
+    margin-bottom: 10px; 
+    background-color: rgb(206, 206, 206); 
+    padding: 10px; 
+    display: grid; 
+    justify-content: flex-end;
+}
+
+.equation {
+    font-size: 0.9rem;
+    text-align: right; 
+}
+
+.result {
+    font-size: 1.5rem;
+    
+}
+
+.keypad {
+    display: grid; 
+    gap: 10px; 
+    grid-template-columns: repeat(5, 1fr); 
+    grid-template-areas: "seven eight nine backspace clear" 
+        "four five six mult divide"
+        "one two three add sub"
+        "zero zero dot equals equals"
+    ;
+    justify-content: space-between;
+}
+
+.key {
+    font-size: 1.2rem;
+    text-align: center;
+    margin: 0 auto; 
+    height: 90%; 
+    width: 90%; 
+    border: 1px solid transparent; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center;
+    box-shadow: 4px 4px 4px 0 rgba(0,0,0,0.25); 
+    transition: scale 0.2s; 
+    cursor: pointer; 
+    font-weight: bold; 
+    background-color: rgba(44,44,44); 
+    color: white; 
+    border-radius: 5px;
+}
+
+.key:hover {
+    transform: scale(1.1); 
+}
+
+.success {
+    background-color: rgb(29, 158, 29);
+}
+.warning {
+    background-color: rgb(221, 199, 75);
+}
+
+#zero {
+    grid-area: zero; 
+}
+#one {
+    grid-area: one; 
+}
+#two {
+    grid-area: two; 
+}
+#three {
+    grid-area: three; 
+}
+#four {
+    grid-area: four; 
+}
+#five {
+    grid-area: five; 
+}
+#six {
+    grid-area: six; 
+}
+#seven {
+    grid-area: seven; 
+}
+#eight {
+    grid-area: eight; 
+}
+#nine {
+    grid-area: nine; 
+}
+#dot {
+    grid-area: dot; 
+}
+#add {
+    grid-area: add; 
+}
+#sub {
+    grid-area: sub; 
+}
+#mult {
+    grid-area: mult; 
+}
+#divide {
+    grid-area: divide; 
+}
+#equals {
+    grid-area: equals; 
+}
+#backspace {
+    grid-area: backspace; 
+}
+#clear {
+    grid-area: clear; 
+}
+
+
+@media screen and (min-width: 64em) {
+    .calculator {
+        width: 30%; 
+        height: 60%; 
+    }
+}
