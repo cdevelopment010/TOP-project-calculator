@@ -1,9 +1,9 @@
 let btns = document.querySelectorAll(".key");
 let equation = document.querySelector(".equation");
 let result = document.querySelector(".result");
-
 let currentString = "";
 let currentResult = 0;
+let regex = /\+|\-|\*|\//g;
 
 document.addEventListener("keydown", function (e) {
   //array of acceptable keydowns
@@ -12,6 +12,7 @@ document.addEventListener("keydown", function (e) {
     keys.push(String(i));
   }
   if (keys.includes(e.key)) {
+    // set up an object with id/innertext to replicate btns propeties
     let item = {
       innerText: e.key,
       id: e.key,
@@ -29,6 +30,7 @@ btns.forEach((btn) => {
 
 function populateKeyOrBtn(item) {
   // if two operators are pressed in a row, replace with newest operator
+  // this means you can't multiply by -1 
   if (
     ["+", "-", "*", "/"].indexOf(currentString[currentString.length - 1]) !=
       -1 &&
@@ -50,12 +52,12 @@ function populateKeyOrBtn(item) {
     item.id != "Escape" &&
     item.id != "Backspace"
   ) {
-    console.log(item);
     btnPress(item);
   }
 
   if (item.id == "clear" || item.id == "Escape") {
     clear();
+    return; 
   }
 
   if (item.id == "backspace" || item.id == "Backspace") {
@@ -64,12 +66,15 @@ function populateKeyOrBtn(item) {
 
   if (item.id == "equals" || item.id == "=" || item.id == "Enter") {
     calculate();
+    return;
   }
 
-  let regex = /\+|\-|\*|\//g;
-  let operatorCount = currentString.match(regex);
-  if (operatorCount && operatorCount.length > 1) {
-    calculateTwoOperators();
+  if (currentString.length > 0){
+    let firstCharNeg = currentString[0].match(regex); 
+    let operatorCount = currentString.match(regex);
+    if ((operatorCount && operatorCount.length > 1 && firstCharNeg == null) || (operatorCount && operatorCount.length > 2 && firstCharNeg.length == 1)) {
+      calculate();
+    }
   }
 }
 
@@ -120,43 +125,31 @@ function backspace() {
   result.innerText = currentString;
 }
 
-function calculateTwoOperators() {
-  let regex = /\+|\-|\*|\//g;
-  let numbers = currentString.split(regex).slice(0, -1);
-  let op1 = currentString.match(regex)[0];
-  let op2 = currentString.match(regex)[1];
-  console.log(numbers);
-  console.log(op2);
-
-  switch (op1) {
-    case "+":
-      return operator(add, Number(numbers[0]), Number(numbers[1]), op2);
-    case "-":
-      return operator(subtract, Number(numbers[0]), Number(numbers[1]), op2);
-    case "*":
-      return operator(multiply, Number(numbers[0]), Number(numbers[1]), op2);
-    case "/":
-      return operator(divide, Number(numbers[0]), Number(numbers[1]), op2);
-    default:
-      return console.log("error");
-  }
-}
-
 function calculate() {
-  let regex = /\+|\-|\*|\//g;
   let numbers = currentString.split(regex);
-  let op1 = currentString.match(regex)[0];
-  console.log(numbers);
+  let totalOps = currentString.match(regex); 
+  let num1 = numbers[0] == '' ? totalOps[0] + numbers[1] : numbers[0]; 
+  let num2 = numbers[0] == '' && numbers.length == 3 ? numbers[2] 
+              : numbers[0] == ''? 0 : numbers[1];
+  let op1 = numbers.length == 3 && totalOps.length >= 2 ? totalOps[1] : totalOps[0];
+  let op2 = numbers.length == 3 && totalOps.length >= 2 ? totalOps[2] : totalOps[1];
+
+  // console.log('numbers',numbers);
+  // console.log('totalOps',totalOps);
+  // console.log('num1',num1);
+  // console.log('num2',num2);
+  // console.log('op1',op1);
+  // console.log('op2',op2);
 
   switch (op1) {
     case "+":
-      return operator(add, Number(numbers[0]), Number(numbers[1]));
+      return operator(add, Number(num1), Number(num2), op2);
     case "-":
-      return operator(subtract, Number(numbers[0]), Number(numbers[1]));
+      return operator(subtract, Number(num1), Number(num2), op2);
     case "*":
-      return operator(multiply, Number(numbers[0]), Number(numbers[1]));
+      return operator(multiply, Number(num1), Number(num2), op2);
     case "/":
-      return operator(divide, Number(numbers[0]), Number(numbers[1]));
+      return operator(divide, Number(num1), Number(num2), op2);
     default:
       return console.log("error");
   }
